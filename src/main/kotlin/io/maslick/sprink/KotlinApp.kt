@@ -30,4 +30,5 @@ fun main(args: Array<String>) {
     val context = AnnotationConfigApplicationContext(MyKotlinConfig::class.java)
     val printer = context.getBean(MessagePrinter::class.java)
     printer.printMessage()
+    println("Number of beans registered: ${context.beanDefinitionNames.size}")
 }
