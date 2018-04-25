@@ -13,7 +13,7 @@ internal interface MessageService {
 }
 
 @Component
-internal class MessagePrinter(@Autowired private val service: MessageService) {
+internal class MessagePrinter(private val service: MessageService) {
     fun printMessage() {
         println(service.getMessage())
     }
