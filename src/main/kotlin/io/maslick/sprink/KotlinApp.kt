@@ -19,7 +19,7 @@ internal class MessagePrinter(private val service: MessageService) {
 }
 
 @Configuration
-@ComponentScan(basePackageClasses = [MessagePrinter::class])
+@ComponentScan(basePackages = ["io.maslick.sprink"])
 internal class MyKotlinConfig {
     @Bean fun mockMessageService(): MessageService = object : MessageService {
         override fun getMessage() = "hello people!!!"
@@ -27,7 +27,12 @@ internal class MyKotlinConfig {
 }
 
 fun main(args: Array<String>) {
+    val timeA = System.currentTimeMillis()
     val context = AnnotationConfigApplicationContext(MyKotlinConfig::class.java)
+    val timeB = System.currentTimeMillis()
+    val time = timeB - timeA
+    println("Time to load context: $time ms")
+
     val printer = context.getBean(MessagePrinter::class.java)
     printer.printMessage()
     println("Number of beans registered: ${context.beanDefinitionNames.size}")
