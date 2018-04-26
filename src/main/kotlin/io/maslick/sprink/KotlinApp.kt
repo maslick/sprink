@@ -1,39 +1,31 @@
 package io.maslick.sprink
 
-import org.springframework.context.annotation.AnnotationConfigApplicationContext
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.ComponentScan
-import org.springframework.context.annotation.Configuration
-import org.springframework.stereotype.Component
+import org.springframework.context.support.ClassPathXmlApplicationContext
 
+internal class Performer {
 
-internal interface MessageService {
-    fun getMessage(): String
-}
+    lateinit var instruments: List<Instrument>
 
-@Component
-internal class MessagePrinter(private val service: MessageService) {
-    fun printMessage() {
-        println(service.getMessage())
+    override fun toString(): String {
+        return "Performer [instruments=$instruments]"
     }
 }
 
-@Configuration
-@ComponentScan(basePackages = ["io.maslick.sprink"])
-internal class MyKotlinConfig {
-    @Bean fun mockMessageService(): MessageService = object : MessageService {
-        override fun getMessage() = "hello people!!!"
+
+data class Instrument(var name: String? = null) {
+    override fun toString(): String {
+        return "Instrument [name=$name]"
     }
 }
 
-fun main(args: Array<String>) {
-    val timeA = System.currentTimeMillis()
-    val context = AnnotationConfigApplicationContext(MyKotlinConfig::class.java)
-    val timeB = System.currentTimeMillis()
-    val time = timeB - timeA
-    println("Time to load context: $time ms")
+internal object AppMain {
+    @JvmStatic
+    fun main(args: Array<String>) {
+        val context = ClassPathXmlApplicationContext("spring.xml")
+        println("number of beans: " + context.beanDefinitionCount)
+        context.beanDefinitionNames.forEach { println(it) }
 
-    val printer = context.getBean(MessagePrinter::class.java)
-    printer.printMessage()
-    println("Number of beans registered: ${context.beanDefinitionNames.size}")
+        val performer = context.getBean("performer", Performer::class.java)
+        performer.instruments.forEach { println(it) }
+    }
 }
