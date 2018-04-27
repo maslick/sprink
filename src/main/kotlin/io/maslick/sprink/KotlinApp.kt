@@ -16,7 +16,11 @@ data class Instrument(var name: String? = null) {
 }
 
 fun main(args: Array<String>) {
+    val timeA = System.currentTimeMillis()
     val context = ClassPathXmlApplicationContext("spring.xml")
+    val timeB = System.currentTimeMillis()
+    println("Context up time: ${timeB-timeA} ms")
+
     println("number of beans: " + context.beanDefinitionCount)
     context.beanDefinitionNames.forEach { println("bean: $it") }
     println()
